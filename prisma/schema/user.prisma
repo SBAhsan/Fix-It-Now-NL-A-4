@@ -10,6 +10,7 @@ model User {
     updatedAt         DateTime           @updatedAt
     technicianProfile TechnicianProfile?
     bookings          Booking[]
+    reviews           Review[]
 
     @@index([role])
     @@map("users")

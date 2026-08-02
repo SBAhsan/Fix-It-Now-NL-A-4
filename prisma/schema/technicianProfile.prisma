@@ -13,6 +13,7 @@ model TechnicianProfile {
     services          Service[]
     availabilitySlots AvailabilitySlot[]
     bookings          Booking[]
+    reviews           Review[]
 
     @@index([city])
     @@index([avgRating])
