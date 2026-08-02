@@ -1,16 +1,16 @@
 model TechnicianProfile {
-    id              String   @id @default(uuid())
-    bio             String?
-    skills          String[]
-    experienceYears Int      @default(0)
-    city            String
-    userId          String
-    user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+    id                String             @id @default(uuid())
+    bio               String?
+    skills            String[]
+    experienceYears   Int                @default(0)
+    city              String
+    userId            String             @unique
+    user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt         DateTime           @default(now())
     updatedAt         DateTime           @updatedAt
     services          Service[]
     availabilitySlots AvailabilitySlot[]
+    bookings          Booking[]
 
     @@map("technician_profiles")
 }

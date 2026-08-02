@@ -9,3 +9,12 @@ enum UserStatus {
     INACTIVE
     BLOCKED
 }
+
+enum BookingStatus {
+    PENDING
+    ACCEPTED
+    DECLINED
+    IN_PROGRESS
+    COMPLETED
+    CANCELLED
+}

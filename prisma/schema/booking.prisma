@@ -1,0 +1,20 @@
+model Booking {
+    id            String            @id @default(uuid())
+    scheduledDate DateTime
+    scheduledTime DateTime
+    status        BookingStatus     @default(PENDING)
+    workAddress   String
+    totalAmount   Decimal
+    customerId    String
+    customer      User              @relation(fields: [customerId], references: [id], onDelete: Cascade)
+    technicianId  String
+    technician    TechnicianProfile @relation(fields: [technicianId], references: [id], onDelete: Cascade)
+    serviceId     String
+    service       Service           @relation(fields: [serviceId], references: [id])
+    slotId        String            @unique
+    slot          AvailabilitySlot? @relation(fields: [slotId], references: [id])
+    createdAt     DateTime          @default(now())
+    updatedAt     DateTime          @updatedAt
+
+    @@map("bookings")
+}

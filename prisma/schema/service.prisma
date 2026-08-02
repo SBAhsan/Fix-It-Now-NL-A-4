@@ -8,8 +8,8 @@ model Service {
     technician   TechnicianProfile @relation(fields: [technicianId], references: [id], onDelete: Cascade)
     categoryId   String
     category     Category          @relation(fields: [categoryId], references: [id])
-
-    createdAt DateTime @default(now())
+    createdAt DateTime  @default(now())
+    bookings  Booking[]
 
     @@map("services")
 }

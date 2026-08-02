@@ -8,4 +8,5 @@ model AvailabilitySlot {
     createdAt    DateTime          @default(now())
 
     @@map("availability_slots")
+    bookings Booking?
 }

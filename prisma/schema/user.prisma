@@ -10,5 +10,6 @@ model User {
     updatedAt DateTime   @updatedAt
 
     @@map("users")
-    technicianProfiles TechnicianProfile[]
+    technicianProfiles TechnicianProfile?
+    bookings Booking[]
 }
