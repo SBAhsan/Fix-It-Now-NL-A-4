@@ -15,6 +15,10 @@ model Booking {
     slot          AvailabilitySlot? @relation(fields: [slotId], references: [id])
     createdAt     DateTime          @default(now())
     updatedAt     DateTime          @updatedAt
+    payment       Payment?
 
+    @@index([customerId])
+    @@index([technicianId])
+    @@index([status])
     @@map("bookings")
 }

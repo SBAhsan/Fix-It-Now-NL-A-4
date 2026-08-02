@@ -4,6 +4,8 @@ model TechnicianProfile {
     skills            String[]
     experienceYears   Int                @default(0)
     city              String
+    avgRating         Decimal            @default(0)
+    totalReviews      Int                @default(0)
     userId            String             @unique
     user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt         DateTime           @default(now())
@@ -12,5 +14,7 @@ model TechnicianProfile {
     availabilitySlots AvailabilitySlot[]
     bookings          Booking[]
 
+    @@index([city])
+    @@index([avgRating])
     @@map("technician_profiles")
 }

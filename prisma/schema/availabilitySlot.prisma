@@ -6,7 +6,9 @@ model AvailabilitySlot {
     technicianId String
     technician   TechnicianProfile @relation(fields: [technicianId], references: [id], onDelete: Cascade)
     createdAt    DateTime          @default(now())
+    booking      Booking?
 
+    @@unique([technicianId, slotDate, slotTime])
+    @@index([technicianId, slotDate])
     @@map("availability_slots")
-    bookings Booking?
 }

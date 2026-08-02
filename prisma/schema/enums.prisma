@@ -18,3 +18,15 @@ enum BookingStatus {
     COMPLETED
     CANCELLED
 }
+
+enum PaymentProvider {
+    Stripe
+    SSLcommerz
+}
+
+enum PaymentStatus {
+    PENDING
+    COMPLETED
+    FAILED
+    REFUNDED
+}
