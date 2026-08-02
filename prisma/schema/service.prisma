@@ -1,0 +1,15 @@
+model Service {
+    id           String            @id @default(uuid())
+    title        String
+    description  String?
+    price        Decimal
+    isActive     Boolean
+    technicianId String
+    technician   TechnicianProfile @relation(fields: [technicianId], references: [id], onDelete: Cascade)
+    categoryId   String
+    category     Category          @relation(fields: [categoryId], references: [id])
+
+    createdAt DateTime @default(now())
+
+    @@map("services")
+}
