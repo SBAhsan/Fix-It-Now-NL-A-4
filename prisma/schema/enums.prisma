@@ -6,8 +6,8 @@ enum UserRole {
 
 enum UserStatus {
     ACTIVE
-    INACTIVE
-    BLOCKED
+    BANNED
+    UNBANNED
 }
 
 enum BookingStatus {

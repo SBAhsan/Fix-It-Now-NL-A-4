@@ -41,8 +41,23 @@ const getAllUsers = catchAsync(async(req: Request, res: Response, next: NextFunc
     })
 })
 
+const updateUser = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.id;
+    const payload = req.body;
+
+    const result = await adminService.updateUserFromDB(userId as string, payload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "User updated successfully",
+        data: result
+    })
+})
+
 export const adminController = {
     createCategory,
     getAllCategories,
-    getAllUsers
+    getAllUsers,
+    updateUser
 }

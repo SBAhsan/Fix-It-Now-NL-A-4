@@ -11,4 +11,6 @@ router.get('/categories', auth(UserRole.ADMIN), adminController.getAllCategories
 
 router.get('/users', auth(UserRole.ADMIN), adminController.getAllUsers);
 
+router.patch('/users/:id', auth(UserRole.ADMIN), adminController.updateUser)
+
 export const adminRoute = router;
