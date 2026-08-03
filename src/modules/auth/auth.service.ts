@@ -95,6 +95,10 @@ const getMeFromDB = async (userId: string) => {
     const user = await prisma.user.findUniqueOrThrow({
         where: {
             id: userId
+        },
+
+        omit: {
+            password: true
         }
     });
 

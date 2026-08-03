@@ -4,7 +4,7 @@ model TechnicianProfile {
     skills            String[]
     experienceYears   Int                @default(0)
     city              String
-    avgRating         Decimal            @default(0)
+    avgRating         Decimal            @default(0) @db.Decimal(10, 2)
     totalReviews      Int                @default(0)
     userId            String             @unique
     user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)

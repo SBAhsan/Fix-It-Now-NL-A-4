@@ -54,7 +54,7 @@ export const auth = (...permittedRoles: UserRole[]) => {
       throw new Error("User does not exist. PLease register");
     }
 
-    if (!permittedRoles.length && !permittedRoles.includes(role)) {
+    if (permittedRoles.length && !permittedRoles.includes(role)) {
       throw new Error("You have no access to this resource");
     }
 
