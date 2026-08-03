@@ -29,7 +29,20 @@ const getAllCategories = catchAsync(async(req: Request, res: Response, next: Nex
     })
 })
 
+
+const getAllUsers = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const result = await adminService.getAllUserFromDB();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Retrieved all the users successfully",
+        data: result
+    })
+})
+
 export const adminController = {
     createCategory,
-    getAllCategories
+    getAllCategories,
+    getAllUsers
 }

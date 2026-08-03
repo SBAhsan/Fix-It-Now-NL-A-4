@@ -35,9 +35,20 @@ const getAllCategoriesInDB = async () => {
     const result = await prisma.category.findMany();
 
     return result;
+};
+
+const getAllUserFromDB = async() => {
+    const result = await prisma.user.findMany({
+        omit: {
+            password: true
+        }
+    });
+
+    return result;
 }
 
 export const adminService = {
     createCategoryInDB,
-    getAllCategoriesInDB
+    getAllCategoriesInDB,
+    getAllUserFromDB
 }

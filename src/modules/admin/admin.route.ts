@@ -9,4 +9,6 @@ router.post('/categories', auth(UserRole.ADMIN), adminController.createCategory)
 
 router.get('/categories', auth(UserRole.ADMIN), adminController.getAllCategories);
 
+router.get('/users', auth(UserRole.ADMIN), adminController.getAllUsers);
+
 export const adminRoute = router;
