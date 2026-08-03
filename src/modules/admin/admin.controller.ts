@@ -17,6 +17,19 @@ const createCategory = catchAsync(async(req: Request, res: Response, next: NextF
     });
 })
 
+
+const getAllCategories = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const result = await adminService.getAllCategoriesInDB();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Retrieved all the categories successfully",
+        data: result
+    })
+})
+
 export const adminController = {
-    createCategory
+    createCategory,
+    getAllCategories
 }
