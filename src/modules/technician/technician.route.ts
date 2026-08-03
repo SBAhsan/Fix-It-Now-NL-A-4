@@ -9,6 +9,8 @@ router.post('/create-profile', auth(UserRole.TECHNICIAN), technicianController.c
 
 router.get('/', technicianController.getAllProfiles);
 
+router.get('/:id', technicianController.getSingleProfile);
+
 router.delete('/', auth(UserRole.TECHNICIAN), technicianController.deleteOwnProfile);
 
 router.delete('/:id', auth(UserRole.ADMIN), technicianController.deleteTechnicianProfile);

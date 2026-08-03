@@ -29,6 +29,20 @@ const getAllProfileFromDB = async () => {
     return profiles;
 }
 
+const getSingleProfileFromDB = async (profileId: string) => {
+    
+    const profile = await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            id: profileId
+        },
+        include: {
+            reviews: true
+        }
+    })
+
+    return profile;
+}
+
 const deleteOwnProfileInDB = async (userId: string) => {
     await prisma.technicianProfile.findUniqueOrThrow({
         where: {
@@ -66,6 +80,7 @@ const deleteTechnicianProfileInDB = async (profileId: string) => {
 export const technicianService = {
     createTechnicianProfileInDB,
     getAllProfileFromDB,
+    getSingleProfileFromDB,
     deleteOwnProfileInDB,
     deleteTechnicianProfileInDB
 }

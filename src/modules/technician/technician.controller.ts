@@ -29,6 +29,19 @@ const getAllProfiles = catchAsync(async(req: Request, res: Response, next: NextF
     })
 })
 
+const getSingleProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const profileId = req.params.id;
+
+    const result = await technicianService.getSingleProfileFromDB(profileId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Profile retrieved successfully",
+        data: result
+    })
+})
+
 const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
 
@@ -58,6 +71,7 @@ const deleteTechnicianProfile = catchAsync(async(req: Request, res: Response, ne
 export const technicianController = {
     createTechnicianProfile,
     getAllProfiles,
+    getSingleProfile,
     deleteOwnProfile,
     deleteTechnicianProfile
 }
