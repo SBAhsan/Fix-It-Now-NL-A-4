@@ -23,7 +23,49 @@ const createTechnicianProfileInDB = async (userId: string, payload: ICreateTechn
     return result;
 };
 
+const getAllProfileFromDB = async () => {
+    const profiles = await prisma.technicianProfile.findMany();
+
+    return profiles;
+}
+
+const deleteOwnProfileInDB = async (userId: string) => {
+    await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            userId
+        }
+    })
+
+    const result = await prisma.technicianProfile.delete({
+        where: {
+            userId
+        }
+    });
+
+    return result;
+};
+
+const deleteTechnicianProfileInDB = async (profileId: string) => {
+
+    const profile = await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            id: profileId
+        }
+    })
+
+    console.log(profile);
+    const result = await prisma.technicianProfile.delete({
+        where: {
+            id: profileId
+        }
+    });
+
+    return result;
+}
 
 export const technicianService = {
-    createTechnicianProfileInDB
+    createTechnicianProfileInDB,
+    getAllProfileFromDB,
+    deleteOwnProfileInDB,
+    deleteTechnicianProfileInDB
 }

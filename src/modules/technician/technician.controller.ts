@@ -18,7 +18,46 @@ const createTechnicianProfile = catchAsync(async(req: Request, res: Response, ne
     })
 });
 
+const getAllProfiles = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const profiles = await technicianService.getAllProfileFromDB();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Retrieved all the profiles successfully",
+        data: profiles
+    })
+})
+
+const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+
+    const result = await technicianService.deleteOwnProfileInDB(userId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Profile deleted successfully",
+        data: result
+    })
+})
+
+const deleteTechnicianProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const profileId = req.params.id;
+
+    const result = await technicianService.deleteTechnicianProfileInDB(profileId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Profile deleted successfully",
+        data: result
+    })
+})
 
 export const technicianController = {
-    createTechnicianProfile
+    createTechnicianProfile,
+    getAllProfiles,
+    deleteOwnProfile,
+    deleteTechnicianProfile
 }
