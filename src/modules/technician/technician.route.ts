@@ -17,6 +17,8 @@ router.put('/availability', auth(UserRole.TECHNICIAN), technicianController.upda
 
 router.get('/bookings', auth(UserRole.TECHNICIAN), technicianController.getAllBookings);
 
+router.patch('/bookings/:id', auth(UserRole.TECHNICIAN), technicianController.updateBookingStatus);
+
 router.get('/:id', technicianController.getSingleProfile);
 
 router.post('/create-service', auth(UserRole.TECHNICIAN), technicianController.createService);

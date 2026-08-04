@@ -1,9 +1,11 @@
+import { error } from "node:console";
 import { prisma } from "../../lib/prisma";
 import {
     ICreateAvailableSlotPayload,
   ICreateServicePayload,
   ICreateTechnicianProfile,
   IUpdateAvailableSlotPayload,
+  IUpdateBookingStatusPayload,
 } from "./technician.interface";
 
 const createTechnicianProfileInDB = async (
@@ -109,18 +111,10 @@ const createAvailableSlotInDB = async (userId: string, payload: ICreateAvailable
         }
     });
 
-    await prisma.availabilitySlot.create({
+    const result = await prisma.availabilitySlot.create({
         data: {
             technicianId: technician.id,
             ...payload
-        }
-    });
-
-    const result = await prisma.availabilitySlot.findFirst({
-        where: {
-            technicianId: technician.id,
-            slotDate: payload.slotDate,
-            slotTime: payload.slotTime
         }
     });
     
@@ -184,6 +178,56 @@ const getAllBookingsFromDB = async (userId: string) => {
     });
 
     return result;
+};
+
+const updateBookingStatusInDB = async (userId: string, bookingId: string, payload: IUpdateBookingStatusPayload) => {
+    const technician = await prisma.technicianProfile.findUnique({
+        where: {
+            userId
+        }
+    });
+
+    if(!technician) {
+        throw new Error ("You don't have a profile")
+    }
+
+    const bookingExits = await prisma.booking.findFirst({
+        where: {
+            id: bookingId,
+            technicianId: technician.id,
+        }
+    })
+
+    if(!bookingExits) {
+        throw new Error ("Booking does not exists")
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+        const booking = await tx.booking.update({
+            where: {
+                id: bookingId
+            },
+
+            data: {
+                ...payload
+            }
+        })
+
+        if(payload.status === 'COMPLETED' || payload.status === 'DECLINED' || payload.status === 'CANCELLED'){
+            await tx.availabilitySlot.update({
+                where: {
+                    id: booking.slotId
+                },
+                data: {
+                    isBooked: false
+                }
+            });
+        };
+
+        return booking;
+    });
+
+    return result;
 }
 
 const deleteOwnProfileInDB = async (userId: string) => {
@@ -212,5 +256,6 @@ export const technicianService = {
   getAllSlotsFromDB,
   updateSlotInDB,
   getAllBookingsFromDB,
+  updateBookingStatusInDB,
   deleteOwnProfileInDB,
 };

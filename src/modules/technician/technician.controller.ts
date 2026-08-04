@@ -123,6 +123,21 @@ const getAllBookings = catchAsync(async(req: Request, res: Response, next: NextF
         message: "All of your bookings retrieved successfully",
         data: result
     })
+});
+
+const updateBookingStatus = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const bookingId = req.params.id;
+    const payload = req.body;
+
+    const result = await technicianService.updateBookingStatusInDB(userId as string, bookingId as string, payload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Booking status edited successfully",
+        data: result
+    })
 })
 
 const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
@@ -150,5 +165,6 @@ export const technicianController = {
     getAllSlots,
     updateSlot,
     getAllBookings,
+    updateBookingStatus,
     deleteOwnProfile
 }
