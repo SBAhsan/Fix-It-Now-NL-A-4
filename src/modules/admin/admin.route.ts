@@ -9,8 +9,12 @@ router.post('/categories', auth(UserRole.ADMIN), adminController.createCategory)
 
 router.get('/categories', auth(UserRole.ADMIN), adminController.getAllCategories);
 
+router.get('/services', auth(UserRole.ADMIN), adminController.getAllServices);
+
 router.get('/users', auth(UserRole.ADMIN), adminController.getAllUsers);
 
-router.patch('/users/:id', auth(UserRole.ADMIN), adminController.updateUser)
+router.patch('/users/:id', auth(UserRole.ADMIN), adminController.updateUser);
+
+router.delete('/technician/:id', auth(UserRole.ADMIN), adminController.deleteTechnicianProfile);
 
 export const adminRoute = router;

@@ -2,7 +2,7 @@ model Service {
     id           String            @id @default(uuid())
     title        String
     description  String?
-    price        Decimal
+    price        Decimal           @db.Decimal(10, 2)
     isActive     Boolean
     technicianId String
     technician   TechnicianProfile @relation(fields: [technicianId], references: [id], onDelete: Cascade)

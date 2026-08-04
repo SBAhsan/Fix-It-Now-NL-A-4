@@ -4,7 +4,10 @@ import cors from "cors";
 import config from "./config";
 import { authRoute } from "./modules/auth/auth.route";
 import { technicianRoute } from "./modules/technician/technician.route";
-import { adminRoute, categoryRoute } from "./modules/admin/admin.route";
+import { adminRoute } from "./modules/admin/admin.route";
+import { bookingRoute } from "./modules/bookings/bookings.router";
+import { categoryRoute } from "./modules/category/category.route";
+import { serviceRoute } from "./modules/services/service.route";
 
 const app: Application = express();
 
@@ -27,5 +30,8 @@ app.get("/", (req, res) => {
 app.use('/api/auth', authRoute);
 app.use('/api/technician', technicianRoute);
 app.use('/api/admin', adminRoute);
+app.use('/api/categories', categoryRoute);
+app.use('/api/services', serviceRoute);
+app.use('/api/bookings', bookingRoute)
 
 export default app;

@@ -11,8 +11,13 @@ router.get('/', technicianController.getAllProfiles);
 
 router.get('/:id', technicianController.getSingleProfile);
 
+router.post('/create-service', auth(UserRole.TECHNICIAN), technicianController.createService);
+
+router.get('/services', auth(UserRole.TECHNICIAN), technicianController.getAllServices);
+
+router.post('/availability', auth(UserRole.TECHNICIAN), technicianController.createAvailabilitySlot);
+
 router.delete('/', auth(UserRole.TECHNICIAN), technicianController.deleteOwnProfile);
 
-router.delete('/:id', auth(UserRole.ADMIN), technicianController.deleteTechnicianProfile);
 
 export const technicianRoute = router;

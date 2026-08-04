@@ -4,3 +4,18 @@ export interface ICreateTechnicianProfile {
     experienceYears: number,
     city: string
 }
+
+
+export interface ICreateServicePayload {
+    title: string,
+    description?: string,
+    price: number,
+    isActive: boolean,
+    categoryId: string
+}
+
+export interface ICreateAvailableSlotPayload {
+    slotDate: string,
+    slotTime: string,
+    isBooked: boolean
+}

@@ -37,6 +37,12 @@ const getAllCategoriesInDB = async () => {
   return result;
 };
 
+const getAllServicesFromDB = async () => {
+  const result = await prisma.service.findMany();
+
+  return result;
+};
+
 const getAllUserFromDB = async () => {
   const result = await prisma.user.findMany({
     omit: {
@@ -69,9 +75,29 @@ const updateUserFromDB = async (userId: string, payload: IUpdateUser) => {
   return updatedUser;
 };
 
+const deleteTechnicianProfileInDB = async (profileId: string) => {
+
+    const profile = await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            id: profileId
+        }
+    })
+
+    console.log(profile);
+    const result = await prisma.technicianProfile.delete({
+        where: {
+            id: profileId
+        }
+    });
+
+    return result;
+}
+
 export const adminService = {
   createCategoryInDB,
   getAllCategoriesInDB,
+  getAllServicesFromDB,
   getAllUserFromDB,
   updateUserFromDB,
+  deleteTechnicianProfileInDB
 };

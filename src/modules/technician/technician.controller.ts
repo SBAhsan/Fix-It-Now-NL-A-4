@@ -42,6 +42,46 @@ const getSingleProfile = catchAsync(async(req: Request, res: Response, next: Nex
     })
 })
 
+const createService = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const payload = req.body;
+
+    const result = await technicianService.createServiceInDB(userId as string, payload);
+
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "Service created successfully",
+        data: result
+    })
+});
+
+const getAllServices = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const result = await technicianService.getAllServicesFromDB();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "All the services retrieved successfully",
+        data: result
+    })
+})
+
+const createAvailabilitySlot = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const payload = req.body;
+
+    const result = await technicianService.createAvailableSlotInDB(userId as string, payload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "Created available slot successfully",
+        data: result
+    })
+})
+
 const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
 
@@ -55,23 +95,14 @@ const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: Nex
     })
 })
 
-const deleteTechnicianProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-    const profileId = req.params.id;
 
-    const result = await technicianService.deleteTechnicianProfileInDB(profileId as string)
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Profile deleted successfully",
-        data: result
-    })
-})
 
 export const technicianController = {
     createTechnicianProfile,
     getAllProfiles,
     getSingleProfile,
-    deleteOwnProfile,
-    deleteTechnicianProfile
+    createService,
+    getAllServices,
+    createAvailabilitySlot,
+    deleteOwnProfile
 }
