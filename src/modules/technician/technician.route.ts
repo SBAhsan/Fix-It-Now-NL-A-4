@@ -9,13 +9,15 @@ router.post('/create-profile', auth(UserRole.TECHNICIAN), technicianController.c
 
 router.get('/', technicianController.getAllProfiles);
 
+router.post('/availability', auth(UserRole.TECHNICIAN), technicianController.createAvailabilitySlot);
+
+router.get('/availability', auth(UserRole.TECHNICIAN), technicianController.getAllSlots);
+
 router.get('/:id', technicianController.getSingleProfile);
 
 router.post('/create-service', auth(UserRole.TECHNICIAN), technicianController.createService);
 
 router.get('/services', auth(UserRole.TECHNICIAN), technicianController.getAllServices);
-
-router.post('/availability', auth(UserRole.TECHNICIAN), technicianController.createAvailabilitySlot);
 
 router.delete('/', auth(UserRole.TECHNICIAN), technicianController.deleteOwnProfile);
 

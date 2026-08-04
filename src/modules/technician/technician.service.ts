@@ -124,6 +124,26 @@ const createAvailableSlotInDB = async (userId: string, payload: ICreateAvailable
     });
     
     return result;
+};
+
+const getAllSlotsFromDB = async (userId: string) => {
+    const technician = await prisma.technicianProfile.findUnique({
+        where: {
+            userId
+        }
+    });
+
+    if(!technician) {
+        throw new Error ("You don't have a technician profile.")
+    }
+
+    const result = await prisma.availabilitySlot.findMany({
+        where: {
+            technicianId: technician.id
+        }
+    });
+
+    return result;
 }
 
 const deleteOwnProfileInDB = async (userId: string) => {
@@ -149,5 +169,6 @@ export const technicianService = {
   createServiceInDB,
   getAllServicesFromDB,
   createAvailableSlotInDB,
+  getAllSlotsFromDB,
   deleteOwnProfileInDB,
 };

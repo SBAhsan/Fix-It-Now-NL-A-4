@@ -82,6 +82,22 @@ const createAvailabilitySlot = catchAsync(async(req: Request, res: Response, nex
     })
 })
 
+const getAllSlots = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+
+    const userId = req.user?.id;
+
+    console.log("The user id: ", userId);
+
+    const result = await technicianService.getAllSlotsFromDB(userId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "All the slots retrieved successfully",
+        data: result
+    })
+})
+
 const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
 
@@ -104,5 +120,6 @@ export const technicianController = {
     createService,
     getAllServices,
     createAvailabilitySlot,
+    getAllSlots,
     deleteOwnProfile
 }
