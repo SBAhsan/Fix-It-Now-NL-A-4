@@ -3,6 +3,7 @@ import {
     ICreateAvailableSlotPayload,
   ICreateServicePayload,
   ICreateTechnicianProfile,
+  IUpdateAvailableSlotPayload,
 } from "./technician.interface";
 
 const createTechnicianProfileInDB = async (
@@ -144,6 +145,25 @@ const getAllSlotsFromDB = async (userId: string) => {
     });
 
     return result;
+};
+
+const updateSlotInDB = async (userId: string, payload: IUpdateAvailableSlotPayload) => {
+    const technician = await prisma.technicianProfile.findUnique({
+        where: {
+            userId
+        }
+    });
+
+    const result = await prisma.availabilitySlot.update({
+        where: {
+            id: payload.id
+        },
+        data: {
+            ...payload
+        }
+    })
+
+    return result;
 }
 
 const deleteOwnProfileInDB = async (userId: string) => {
@@ -170,5 +190,6 @@ export const technicianService = {
   getAllServicesFromDB,
   createAvailableSlotInDB,
   getAllSlotsFromDB,
+  updateSlotInDB,
   deleteOwnProfileInDB,
 };

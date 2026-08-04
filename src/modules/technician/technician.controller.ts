@@ -98,6 +98,20 @@ const getAllSlots = catchAsync(async(req: Request, res: Response, next: NextFunc
     })
 })
 
+const updateSlot = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const payload = req.body;
+
+    const result = await technicianService.updateSlotInDB(userId as string, payload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Updated slot successfully",
+        data: result
+    })
+})
+
 const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
 
@@ -121,5 +135,6 @@ export const technicianController = {
     getAllServices,
     createAvailabilitySlot,
     getAllSlots,
+    updateSlot,
     deleteOwnProfile
 }

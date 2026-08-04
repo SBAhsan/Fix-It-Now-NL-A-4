@@ -13,6 +13,8 @@ router.post('/availability', auth(UserRole.TECHNICIAN), technicianController.cre
 
 router.get('/availability', auth(UserRole.TECHNICIAN), technicianController.getAllSlots);
 
+router.put('/availability', auth(UserRole.TECHNICIAN), technicianController.updateSlot)
+
 router.get('/:id', technicianController.getSingleProfile);
 
 router.post('/create-service', auth(UserRole.TECHNICIAN), technicianController.createService);
