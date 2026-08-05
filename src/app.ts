@@ -8,6 +8,7 @@ import { adminRoute } from "./modules/admin/admin.route";
 import { bookingRoute } from "./modules/bookings/bookings.router";
 import { categoryRoute } from "./modules/category/category.route";
 import { serviceRoute } from "./modules/services/service.route";
+import { reviewRoute } from "./modules/review/review.router";
 
 const app: Application = express();
 
@@ -32,6 +33,7 @@ app.use('/api/technician', technicianRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/categories', categoryRoute);
 app.use('/api/services', serviceRoute);
-app.use('/api/bookings', bookingRoute)
+app.use('/api/bookings', bookingRoute);
+app.use('/api/reviews', reviewRoute);
 
 export default app;
