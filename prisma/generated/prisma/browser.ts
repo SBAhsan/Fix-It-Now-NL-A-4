@@ -28,6 +28,11 @@ export type AvailabilitySlot = Prisma.AvailabilitySlotModel
  */
 export type Booking = Prisma.BookingModel
 /**
+ * Model BookingItem
+ * 
+ */
+export type BookingItem = Prisma.BookingItemModel
+/**
  * Model Category
  * 
  */

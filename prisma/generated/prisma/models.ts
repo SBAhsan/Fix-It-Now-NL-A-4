@@ -10,6 +10,7 @@
  */
 export type * from './models/AvailabilitySlot'
 export type * from './models/Booking'
+export type * from './models/BookingItem'
 export type * from './models/Category'
 export type * from './models/Payment'
 export type * from './models/Review'

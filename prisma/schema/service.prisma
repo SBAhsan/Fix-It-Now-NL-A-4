@@ -9,7 +9,7 @@ model Service {
     categoryId   String
     category     Category          @relation(fields: [categoryId], references: [id])
     createdAt    DateTime          @default(now())
-    bookings     Booking[]
+    bookingItems BookingItem[]
 
     @@index([categoryId])
     @@index([technicianId])

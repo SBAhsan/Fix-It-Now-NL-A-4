@@ -1,6 +1,6 @@
 export interface ICreateBookingPayload {
   technicianId: string;
-  serviceId: string;
+  serviceIds: string[];
   slotId: string;
   scheduledDate: string;
   scheduledTime: string;

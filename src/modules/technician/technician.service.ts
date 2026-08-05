@@ -34,7 +34,11 @@ const createTechnicianProfileInDB = async (
 };
 
 const getAllProfileFromDB = async () => {
-  const profiles = await prisma.technicianProfile.findMany();
+  const profiles = await prisma.technicianProfile.findMany({
+    include: {
+        availabilitySlots : true
+    }
+  });
 
   return profiles;
 };
@@ -46,6 +50,7 @@ const getSingleProfileFromDB = async (profileId: string) => {
     },
     include: {
       reviews: true,
+      availabilitySlots : true
     },
   });
 
