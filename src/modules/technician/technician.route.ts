@@ -15,7 +15,7 @@ router.get('/availability', auth(UserRole.TECHNICIAN), technicianController.getA
 
 router.put('/availability', auth(UserRole.TECHNICIAN), technicianController.updateSlot);
 
-router.get('/bookings', auth(UserRole.TECHNICIAN), technicianController.getAllBookings);
+router.get('/bookings', auth(UserRole.TECHNICIAN), technicianController.getMyAllBookings);
 
 router.post('/create-service', auth(UserRole.TECHNICIAN), technicianController.createService);
 
@@ -26,6 +26,8 @@ router.get('/reviews', auth(UserRole.TECHNICIAN), technicianController.getAllRev
 router.delete('/', auth(UserRole.TECHNICIAN), technicianController.deleteOwnProfile);
 
 router.patch('/bookings/:id', auth(UserRole.TECHNICIAN), technicianController.updateBookingStatus);
+
+router.get('/bookings/:id', auth(UserRole.TECHNICIAN), technicianController.getMyBookingById)
 
 router.get('/:id', technicianController.getSingleProfile);
 

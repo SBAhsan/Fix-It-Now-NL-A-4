@@ -112,10 +112,10 @@ const updateSlot = catchAsync(async(req: Request, res: Response, next: NextFunct
     })
 })
 
-const getAllBookings = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+const getMyAllBookings = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
 
-    const result = await technicianService.getAllBookingsFromDB(userId as string);
+    const result = await technicianService.getMyAllBookingsFromDB(userId as string);
 
     sendResponse(res, {
         success: true,
@@ -124,6 +124,20 @@ const getAllBookings = catchAsync(async(req: Request, res: Response, next: NextF
         data: result
     })
 });
+
+const getMyBookingById = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const bookingId = req.params.id;
+
+    const booking = await technicianService.getMyBookingByIdFromDB(userId as string, bookingId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Booking retrieved successfully",
+        data: booking
+    })
+})
 
 const updateBookingStatus = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
@@ -177,7 +191,8 @@ export const technicianController = {
     createAvailabilitySlot,
     getAllSlots,
     updateSlot,
-    getAllBookings,
+    getMyAllBookings,
+    getMyBookingById,
     updateBookingStatus,
     getAllReviewsOnMe,
     deleteOwnProfile
