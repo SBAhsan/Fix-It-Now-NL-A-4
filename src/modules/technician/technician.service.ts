@@ -233,6 +233,26 @@ const updateBookingStatusInDB = async (userId: string, bookingId: string, payloa
     });
 
     return result;
+};
+
+const getAllReviewsOnMeFromDB = async (userId: string) => {
+    const technician = await prisma.technicianProfile.findUnique({
+        where: {
+            userId
+        }
+    })
+
+    if(!technician) {
+        throw new Error ("You don't have a technician profile")
+    }
+
+    const result = await prisma.review.findMany({
+        where: {
+            technicianId: technician.id
+        }
+    });
+
+    return result;
 }
 
 const deleteOwnProfileInDB = async (userId: string) => {
@@ -262,5 +282,6 @@ export const technicianService = {
   updateSlotInDB,
   getAllBookingsFromDB,
   updateBookingStatusInDB,
+  getAllReviewsOnMeFromDB,
   deleteOwnProfileInDB,
 };

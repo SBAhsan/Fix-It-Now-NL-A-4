@@ -140,6 +140,19 @@ const updateBookingStatus = catchAsync(async(req: Request, res: Response, next: 
     })
 })
 
+const getAllReviewsOnMe = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+
+    const result = await technicianService.getAllReviewsOnMeFromDB(userId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Reviews retrieved successfully",
+        data: result
+    })
+})
+
 const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
 
@@ -166,5 +179,6 @@ export const technicianController = {
     updateSlot,
     getAllBookings,
     updateBookingStatus,
+    getAllReviewsOnMe,
     deleteOwnProfile
 }
