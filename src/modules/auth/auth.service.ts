@@ -3,7 +3,7 @@ import { prisma } from "../../lib/prisma";
 import { ILoginUser, IUserRegisterPayload } from "./auth.interface";
 import config from "../../config";
 import { jwtUtils } from "../../utils/jwt";
-import { SignOptions } from "jsonwebtoken";
+import { JwtPayload, SignOptions } from "jsonwebtoken";
 
 const registerUserInDB = async (payload: IUserRegisterPayload) => {
   const { name, email, password, phone, role, status } = payload;
@@ -90,6 +90,40 @@ const loginUserInDB = async (payload: ILoginUser) => {
   }
 };
 
+const refreshTokenInDB = async (refreshToken: string) => {
+    const verifiedRefreshToken = jwtUtils.verifyToken(refreshToken, config.jwt_refresh_secret as string);
+
+    if(!verifiedRefreshToken.success){
+        throw new Error (verifiedRefreshToken.error)
+    }
+
+    const {id} = verifiedRefreshToken.data as JwtPayload;
+
+    const user = await prisma.user.findUniqueOrThrow({
+        where: {
+            id
+        }
+    });
+
+    if(user.status === 'BANNED'){
+        throw new Error ("This user is banned")
+    }
+
+    const jwtPayload = {
+        id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    }
+
+    const accessToken = jwtUtils.createToken(
+        jwtPayload,
+        config.jwt_access_secret as string,
+        config.jwt_access_expires_in as SignOptions
+    );
+
+    return {accessToken};
+};
 
 const getMeFromDB = async (userId: string) => {
     const user = await prisma.user.findUniqueOrThrow({
@@ -103,10 +137,13 @@ const getMeFromDB = async (userId: string) => {
     });
 
     return user;
-}
+};
+
+
 
 export const authService = {
   registerUserInDB,
   loginUserInDB,
+  refreshTokenInDB,
   getMeFromDB
 };

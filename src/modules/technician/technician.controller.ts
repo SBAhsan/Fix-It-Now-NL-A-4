@@ -18,44 +18,6 @@ const createTechnicianProfile = catchAsync(async(req: Request, res: Response, ne
     })
 });
 
-const getAllProfiles = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-    const profiles = await technicianService.getAllProfileFromDB();
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Retrieved all the profiles successfully",
-        data: profiles
-    })
-})
-
-const getSingleProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-    const profileId = req.params.id;
-
-    const result = await technicianService.getSingleProfileFromDB(profileId as string)
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Profile retrieved successfully",
-        data: result
-    })
-})
-
-const createService = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user?.id;
-    const payload = req.body;
-
-    const result = await technicianService.createServiceInDB(userId as string, payload);
-
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.CREATED,
-        message: "Service created successfully",
-        data: result
-    })
-});
 
 const getAllServices = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const result = await technicianService.getAllServicesFromDB();
@@ -184,9 +146,6 @@ const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: Nex
 
 export const technicianController = {
     createTechnicianProfile,
-    getAllProfiles,
-    getSingleProfile,
-    createService,
     getAllServices,
     createAvailabilitySlot,
     getAllSlots,

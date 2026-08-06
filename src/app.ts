@@ -9,6 +9,7 @@ import { bookingRoute } from "./modules/bookings/bookings.router";
 import { categoryRoute } from "./modules/category/category.route";
 import { serviceRoute } from "./modules/services/service.route";
 import { reviewRoute } from "./modules/review/review.router";
+import { userRoute } from "./modules/user/user.route";
 
 const app: Application = express();
 
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 
 
 app.use('/api/auth', authRoute);
+app.use('/api', userRoute);
 app.use('/api/technician', technicianRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/categories', categoryRoute);

@@ -5,6 +5,20 @@ import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 
 
+const createService = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const payload = req.body;
+
+    const result = await serviceService.createServiceInDB(userId as string, payload);
+
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "Service created successfully",
+        data: result
+    })
+});
 
 const getAllServices = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const result = await serviceService.getAllServicesFromDB();
@@ -15,8 +29,11 @@ const getAllServices = catchAsync(async(req: Request, res: Response, next: NextF
         message: "Retrieved all the services successfully",
         data: result
     })
-})
+});
+
+
 
 export const serviceController = {
-    getAllServices
+    getAllServices,
+    createService
 }

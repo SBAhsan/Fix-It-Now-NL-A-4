@@ -7,8 +7,6 @@ const router = Router();
 
 router.post('/create-profile', auth(UserRole.TECHNICIAN), technicianController.createTechnicianProfile);
 
-router.get('/', technicianController.getAllProfiles);
-
 router.post('/availability', auth(UserRole.TECHNICIAN), technicianController.createAvailabilitySlot);
 
 router.get('/availability', auth(UserRole.TECHNICIAN), technicianController.getAllSlots);
@@ -16,8 +14,6 @@ router.get('/availability', auth(UserRole.TECHNICIAN), technicianController.getA
 router.put('/availability', auth(UserRole.TECHNICIAN), technicianController.updateSlot);
 
 router.get('/bookings', auth(UserRole.TECHNICIAN), technicianController.getMyAllBookings);
-
-router.post('/create-service', auth(UserRole.TECHNICIAN), technicianController.createService);
 
 router.get('/services', auth(UserRole.TECHNICIAN), technicianController.getAllServices);
 
@@ -28,8 +24,6 @@ router.delete('/', auth(UserRole.TECHNICIAN), technicianController.deleteOwnProf
 router.patch('/bookings/:id', auth(UserRole.TECHNICIAN), technicianController.updateBookingStatus);
 
 router.get('/bookings/:id', auth(UserRole.TECHNICIAN), technicianController.getMyBookingById)
-
-router.get('/:id', technicianController.getSingleProfile);
 
 
 export const technicianRoute = router;
