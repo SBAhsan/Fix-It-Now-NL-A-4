@@ -1,6 +1,6 @@
+import { title } from "node:process";
 import { prisma } from "../../lib/prisma";
-import { ICreateServicePayload } from "./service.interface";
-
+import { ICreateServicePayload, IServiceQuery } from "./service.interface";
 
 const createServiceInDB = async (
   userId: string,
@@ -36,36 +36,111 @@ const createServiceInDB = async (
     },
   });
 
-  const result = await prisma.service.findFirst({
+  return service;
+};
+
+const getAllServicesFromDB = async (query: IServiceQuery) => {
+  const andConditions: IServiceQuery[] = [];
+
+  if (query.searchItem) {
+    andConditions.push({
+      OR: [
+        {
+          title: {
+            contains: query.searchItem,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: query.searchItem,
+            mode: "insensitive",
+          },
+        },
+        {
+          category: {
+            name: {
+              contains: query.searchItem,
+              mode: "insensitive",
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  if (query.categoryId) {
+    andConditions.push({
+      categoryId: query.categoryId,
+    });
+  }
+
+  if (query.location) {
+    andConditions.push({
+      technician: {
+        city: {
+          contains: query.location,
+          mode: "insensitive",
+        },
+      },
+    });
+  }
+
+  const services = await prisma.service.findMany({
     where: {
-      technicianId: technician?.id,
-      title: payload.title,
-      price: payload.price,
-      categoryId: payload.categoryId,
+      isActive: true,
+    },
+
+    include: {
+      category: true,
+      technician: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+
+    orderBy: {
+      createdAt: "desc",
     },
   });
+
+  const technicianIds = [...new Set(services.map((s) => s.technicianId))];
+
+  const ratings = await prisma.review.groupBy({
+    by: ["technicianId"],
+    where: {
+      technicianId: {
+        in: technicianIds,
+      },
+    },
+    _avg: {
+      rating: true,
+    },
+  });
+
+  const ratingsMap = new Map(ratings.map((r) => [r.technicianId, r._avg ?? 0]));
+
+  let result = services.map((service) => ({
+    ...service,
+    technicianRating: ratingsMap.get(service.technicianId) ?? 0,
+  }));
+
+  if (query.rating) {
+    result = result.filter(
+      (service) => service.technicianRating === query.rating,
+    );
+  }
 
   return result;
 };
 
-
-const getAllServicesFromDB = async() => {
-    const result = await prisma.service.findMany({
-        where: {
-            isActive: true
-        },
-
-        include: {
-            technician: true
-        }
-    });
-
-    return result;
-};
-
-
-
 export const serviceService = {
-    createServiceInDB,
-    getAllServicesFromDB,
-}
+  createServiceInDB,
+  getAllServicesFromDB,
+};
