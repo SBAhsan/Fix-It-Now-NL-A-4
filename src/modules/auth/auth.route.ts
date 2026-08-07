@@ -2,12 +2,14 @@ import { Router } from "express";
 import { authController } from "./auth.controller";
 import { auth } from "../../middleware/auth";
 import { UserRole } from "../../../prisma/generated/prisma/enums";
+import { validateRequest } from "../../middleware/validateRequest";
+import { loginUserSchema, registerUserSchema } from "./auth.validation";
 
 const router = Router();
 
-router.post('/register', authController.registerUser);
+router.post('/register', validateRequest(registerUserSchema), authController.registerUser);
 
-router.post('/login', authController.loginUser);
+router.post('/login', validateRequest(loginUserSchema), authController.loginUser);
 
 router.post('/refresh-token', authController.refreshToken);
 
