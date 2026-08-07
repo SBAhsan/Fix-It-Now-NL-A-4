@@ -179,6 +179,8 @@ async function main() {
       comment: "Excellent work, very professional and on time!",
     },
   });
+
+  console.log("Seeding is completed!");
 }
 
 main().then(process.exit(0));
