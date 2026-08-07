@@ -5,6 +5,18 @@ import { BookingStatus, UserRole } from "./generated/prisma/enums";
 async function main() {
   const hashedPassword = await bcrypt.hash("Passw0rd!123", 10);
 
+  const admin = await prisma.user.create({
+    data: {
+      name: "Admin User",
+      email: "admin@example.com",
+      password: hashedPassword,
+      phone: "01910000000",
+      role: UserRole.ADMIN,
+    },
+  });
+
+  console.log("Created a user as admin");
+
   const [customer1, customer2] = await Promise.all([
     await prisma.user.create({
       data: {
@@ -27,6 +39,8 @@ async function main() {
     }),
   ]);
 
+  console.log("Created 2 users as customers");
+
   const [techUser1, techUser2] = await Promise.all([
     await prisma.user.create({
       data: {
@@ -48,6 +62,8 @@ async function main() {
       },
     }),
   ]);
+
+  console.log("Created 2 users as technicians");
 
   const [technician1, technician2] = await Promise.all([
     await prisma.technicianProfile.create({
@@ -75,6 +91,8 @@ async function main() {
     }),
   ]);
 
+  console.log("Created 2 technician profiles");
+
   const [category1, category2, category3] = await Promise.all([
     prisma.category.create({
       data: {
@@ -97,6 +115,8 @@ async function main() {
       },
     }),
   ]);
+
+  console.log("Created 3 categories");
 
   const [service1, service2] = await Promise.all([
     await prisma.service.create({
@@ -122,6 +142,8 @@ async function main() {
     }),
   ]);
 
+  console.log("Created 2 services");
+
   const [slot1, slot2] = await Promise.all([
     await prisma.availabilitySlot.create({
       data: {
@@ -141,6 +163,8 @@ async function main() {
       },
     }),
   ]);
+
+  console.log("Created 2 availability slots");
 
   const [booking1, booking2] = await Promise.all([
     await prisma.booking.create({
@@ -170,6 +194,8 @@ async function main() {
     }),
   ]);
 
+  console.log("Created 2 bookings");
+
   const review1 = await prisma.review.create({
     data: {
       bookingId: booking1.id,
@@ -180,7 +206,7 @@ async function main() {
     },
   });
 
-  console.log("Seeding is completed!");
+  console.log("Created 1 review");
 }
 
 main().then(process.exit(0));
