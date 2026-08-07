@@ -10,6 +10,8 @@ import { categoryRoute } from "./modules/category/category.route";
 import { serviceRoute } from "./modules/services/service.route";
 import { reviewRoute } from "./modules/review/review.router";
 import { userRoute } from "./modules/user/user.route";
+import { notFound } from "./middleware/notFound";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
 
 const app: Application = express();
 
@@ -37,5 +39,9 @@ app.use('/api/categories', categoryRoute);
 app.use('/api/services', serviceRoute);
 app.use('/api/bookings', bookingRoute);
 app.use('/api/reviews', reviewRoute);
+
+
+app.use(notFound);
+app.use(globalErrorHandler);
 
 export default app;
