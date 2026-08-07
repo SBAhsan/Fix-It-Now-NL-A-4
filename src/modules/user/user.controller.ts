@@ -6,7 +6,10 @@ import { userService } from "./user.service";
 import { getPackedSettings } from "node:http2";
 
 const getAllProfiles = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-    const profiles = await userService.getAllProfileFromDB();
+
+    const query = req.query;
+
+    const profiles = await userService.getAllProfileFromDB(query);
 
     sendResponse(res, {
         success: true,

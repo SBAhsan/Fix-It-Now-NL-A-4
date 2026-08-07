@@ -89,8 +89,8 @@ const getAllServicesFromDB = async (query: IServiceQuery) => {
   const services = await prisma.service.findMany({
     where: {
       isActive: true,
+      AND: andConditions
     },
-
     include: {
       category: true,
       technician: {
