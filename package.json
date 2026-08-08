@@ -8,7 +8,8 @@
     "dev": "tsx watch ./src/server.ts",
     "build": "tsc & tsup",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "webhook:stripe": "stripe listen --forward-to localhost:5000/webhooks"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +37,7 @@
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
+    "stripe": "^22.4.0",
     "tsup": "^8.5.1",
     "vercel": "^58.7.1",
     "zod": "^4.4.3"

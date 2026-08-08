@@ -1,5 +1,5 @@
 import cookieParser from "cookie-parser";
-import express, { Application } from "express";
+import express, { application, Application } from "express";
 import cors from "cors";
 import config from "./config";
 import { authRoute } from "./modules/auth/auth.route";
@@ -12,8 +12,12 @@ import { reviewRoute } from "./modules/review/review.router";
 import { userRoute } from "./modules/user/user.route";
 import { notFound } from "./middleware/notFound";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
+import { paymentRoute } from "./modules/payment/payment.route";
+import { paymentController } from "./modules/payment/payment.controller";
 
 const app: Application = express();
+
+app.post('/payments/webhook', express.raw({type: "application/json"}), paymentController.webhook)
 
 app.use(
   cors({
@@ -38,6 +42,7 @@ app.use('/api/admin', adminRoute);
 app.use('/api/categories', categoryRoute);
 app.use('/api/services', serviceRoute);
 app.use('/api/bookings', bookingRoute);
+app.use('/api/payment', paymentRoute);
 app.use('/api/reviews', reviewRoute);
 
 
