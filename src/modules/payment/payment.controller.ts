@@ -8,6 +8,20 @@ import { paymentService } from "./payment.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 
+const createCheckoutSession = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const customerId = req.user?.id;
+    const {bookingId} = req.body;
+
+    const result = await paymentService.createCheckoutSessionInDB(customerId as string, bookingId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "Payment session created successfully",
+        data: result
+    })
+})
+
 const webhook = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const signature = req.headers["stripe-signature"];
 
@@ -35,21 +49,37 @@ const webhook = catchAsync(async(req: Request, res: Response, next: NextFunction
     })
 })
 
-const createCheckoutSession = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-    const customerId = req.user?.id;
-    const {bookingId} = req.body;
 
-    const result = await paymentService.createCheckoutSessionInDB(customerId as string, bookingId);
+const getPaymentHistory = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const customerId = req.user?.id;
+
+    const result = await paymentService.getPaymentHistoryFromDB(customerId as string);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "Payment session created successfully",
+        message: "Payment history retrieved successfully",
+        data: result
+    })
+})
+
+const getPaymentHistoryById = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+    const customerId = req.user?.id;
+    const paymentId = req.params.id;
+
+    const result = await paymentService.getPaymentHistoryByIdFromDB(customerId as string, paymentId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: `Payment history of payment id ${paymentId} retrieved successfully`,
         data: result
     })
 })
 
 export const paymentController = {
+    createCheckoutSession,
     webhook,
-    createCheckoutSession
+    getPaymentHistory,
+    getPaymentHistoryById
 }

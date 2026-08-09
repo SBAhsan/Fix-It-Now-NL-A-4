@@ -68,7 +68,7 @@ export const globalErrorHandler = (
   }
 
   res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-    success: true,
+    success: false,
     statusCode: statusCode || "Internal Server Error",
     errorName: errorName,
     errorMessage: errorMessage,

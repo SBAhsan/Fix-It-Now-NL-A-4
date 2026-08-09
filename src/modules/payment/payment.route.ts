@@ -9,4 +9,8 @@ const router = Router();
 
 router.post("/create", auth(UserRole.CUSTOMER), validateRequest(createPaymentSchema), paymentController.createCheckoutSession);
 
+router.get('/', auth(UserRole.CUSTOMER), paymentController.getPaymentHistory);
+
+router.get('/:id', auth(UserRole.CUSTOMER), paymentController.getPaymentHistoryById)
+
 export const paymentRoute = router;

@@ -17,7 +17,7 @@ import { paymentController } from "./modules/payment/payment.controller";
 
 const app: Application = express();
 
-app.post('/payments/webhook', express.raw({type: "application/json"}), paymentController.webhook)
+app.post('/payments/confirm', express.raw({type: "application/json"}), paymentController.webhook)
 
 app.use(
   cors({
@@ -42,7 +42,7 @@ app.use('/api/admin', adminRoute);
 app.use('/api/categories', categoryRoute);
 app.use('/api/services', serviceRoute);
 app.use('/api/bookings', bookingRoute);
-app.use('/api/payment', paymentRoute);
+app.use('/api/payments', paymentRoute);
 app.use('/api/reviews', reviewRoute);
 
 
