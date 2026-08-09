@@ -36,7 +36,7 @@ const createCheckoutSessionInDB = async (
     throw new AppError(404, "Payment already completed", "");
   }
 
-  if (booking.status !== "PENDING" && booking.status !== "ACCEPTED") {
+  if (booking.status !== "ACCEPTED") {
     throw new AppError(400, `Cannot pay for ${booking.status} booking`, "");
   }
 
@@ -97,6 +97,7 @@ const handleWebhookEvent = async (event: Stripe.Event) => {
         },
         data: {
           status: "COMPLETED",
+          paidAt: new Date()
         },
       });
 

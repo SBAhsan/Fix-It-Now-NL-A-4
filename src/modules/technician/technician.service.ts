@@ -6,6 +6,7 @@ import {
   IUpdateAvailableSlotPayload,
   IUpdateBookingStatusPayload,
 } from "./technician.interface";
+import { AppError } from "../../utils/appError";
 
 const createTechnicianProfileInDB = async (
   userId: string,
@@ -156,7 +157,7 @@ const updateBookingStatusInDB = async (
   });
 
   if (!technician) {
-    throw new Error("You don't have a profile");
+    throw new AppError(404, "You don't have a profile", "");
   }
 
   const bookingExits = await prisma.booking.findFirst({
@@ -167,7 +168,40 @@ const updateBookingStatusInDB = async (
   });
 
   if (!bookingExits) {
-    throw new Error("Booking does not exists");
+    throw new AppError(404, "Booking does not exist", "");
+  }
+
+  switch (bookingExits.status) {
+    case "PENDING": {
+      if (payload.status !== "ACCEPTED" && payload.status !== "DECLINED") {
+        throw new AppError(
+          400,
+          `Cannot change status from PENDING to ${payload.status}`,
+          "",
+        );
+      }
+      break;
+    }
+
+    case "IN_PROGRESS": {
+      if (payload.status !== "COMPLETED" && payload.status !== "CANCELLED") {
+        throw new AppError(
+          400,
+          `Cannot change status from 'IN_PROGRESS' to ${payload.status}`,
+          "",
+        );
+      }
+
+      break;
+    }
+
+    default: {
+      throw new AppError(
+        400,
+        `Cannot change status from ${bookingExits.status}`,
+        "",
+      );
+    }
   }
 
   const result = await prisma.$transaction(async (tx) => {
