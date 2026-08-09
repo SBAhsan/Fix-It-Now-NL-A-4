@@ -82,8 +82,6 @@ const deleteTechnicianProfileInDB = async (profileId: string) => {
             id: profileId
         }
     })
-
-    console.log(profile);
     const result = await prisma.technicianProfile.delete({
         where: {
             id: profileId

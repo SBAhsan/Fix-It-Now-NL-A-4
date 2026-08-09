@@ -48,8 +48,6 @@ const getAllSlots = catchAsync(async(req: Request, res: Response, next: NextFunc
 
     const userId = req.user?.id;
 
-    console.log("The user id: ", userId);
-
     const result = await technicianService.getAllSlotsFromDB(userId as string);
 
     sendResponse(res, {

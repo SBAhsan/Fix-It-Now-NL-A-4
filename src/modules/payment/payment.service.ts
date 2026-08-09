@@ -18,8 +18,6 @@ const createCheckoutSessionInDB = async (
     },
   });
 
-  console.log(bookingId);
-
   if (!booking) {
     throw new AppError(404, "This booking does not exist", "");
   }
@@ -77,8 +75,6 @@ const createCheckoutSessionInDB = async (
       transactionId: session.id,
     },
   });
-
-  console.log(payment);
 
   return { url: session.url, payment };
 };
