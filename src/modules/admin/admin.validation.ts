@@ -1,6 +1,6 @@
 import z from "zod";
 import { nonEmptyString } from "../../common/validationHelpers";
-import { UserRole, UserStatus } from "../../../prisma/generated/prisma/enums";
+import { UserStatus } from "../../../prisma/generated/prisma/enums";
 
 export const createCategorySchema = z.object({
     body: z.object({

@@ -13,6 +13,8 @@ router.get('/categories', auth(UserRole.ADMIN), adminController.getAllCategories
 
 router.get('/services', auth(UserRole.ADMIN), adminController.getAllServices);
 
+router.get('/bookings', auth(UserRole.ADMIN), adminController.getAllBookings);
+
 router.get('/users', auth(UserRole.ADMIN), adminController.getAllUsers);
 
 router.patch('/users/:id', auth(UserRole.ADMIN), validateRequest(updateUserStatusSchema), adminController.updateUser);

@@ -43,6 +43,18 @@ const getAllServicesFromDB = async () => {
   return result;
 };
 
+const getAllBookingsFromDB = async () => {
+  return prisma.booking.findMany({
+    include: {
+      customer: { select: { name: true } },
+      technician: {
+        include: { user: { select: { name: true } } },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
 const getAllUserFromDB = async () => {
   const result = await prisma.user.findMany({
     omit: {
@@ -95,6 +107,7 @@ export const adminService = {
   createCategoryInDB,
   getAllCategoriesInDB,
   getAllServicesFromDB,
+  getAllBookingsFromDB,
   getAllUserFromDB,
   updateUserFromDB,
   deleteTechnicianProfileInDB

@@ -40,6 +40,17 @@ const getAllServices = catchAsync(async(req: Request, res: Response, next: NextF
     })
 })
 
+const getAllBookings = async (req: Request, res: Response) => {
+  const bookings = await adminService.getAllBookingsFromDB();
+
+  sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "All the bookings retrieved successfully",
+        data: bookings
+    })
+};
+
 const getAllUsers = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const result = await adminService.getAllUserFromDB();
 
@@ -83,6 +94,7 @@ export const adminController = {
     createCategory,
     getAllCategories,
     getAllServices,
+    getAllBookings,
     getAllUsers,
     updateUser,
     deleteTechnicianProfile
