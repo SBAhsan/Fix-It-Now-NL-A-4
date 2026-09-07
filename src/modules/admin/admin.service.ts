@@ -65,6 +65,27 @@ const getAllUserFromDB = async () => {
   return result;
 };
 
+const updateCategoryInDB = async (name: string, payload: { isActive: boolean }) => {
+  const category = await prisma.category.findUnique({
+    where: { name },
+  });
+
+  if (!category) {
+    throw new Error("Category not found");
+  }
+
+  await prisma.category.update({
+    where: { name },
+    data: { isActive: payload.isActive },
+  });
+
+  const result = await prisma.category.findUnique({
+    where: { name },
+  });
+
+  return result;
+};
+
 const updateUserFromDB = async (userId: string, payload: IUpdateUser) => {
   await prisma.user.findUniqueOrThrow({
     where: {
@@ -109,6 +130,7 @@ export const adminService = {
   getAllServicesFromDB,
   getAllBookingsFromDB,
   getAllUserFromDB,
+  updateCategoryInDB,
   updateUserFromDB,
   deleteTechnicianProfileInDB
 };

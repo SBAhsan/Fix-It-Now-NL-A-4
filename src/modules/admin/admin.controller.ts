@@ -62,6 +62,17 @@ const getAllUsers = catchAsync(async(req: Request, res: Response, next: NextFunc
     })
 })
 
+const updateCategory = async (req: Request, res: Response) => {
+  const { name } = req.params;
+  const result = await adminService.updateCategoryInDB(name as string, req.body);
+
+  res.status(200).json({
+    success: true,
+    message: "Category updated successfully",
+    data: result,
+  });
+};
+
 const updateUser = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
     const payload = req.body;
@@ -96,6 +107,7 @@ export const adminController = {
     getAllServices,
     getAllBookings,
     getAllUsers,
+    updateCategory,
     updateUser,
     deleteTechnicianProfile
 }

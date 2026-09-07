@@ -14,3 +14,9 @@ export const updateUserStatusSchema = z.object({
         status: z.enum(UserStatus)
     })
 })
+
+export const updateCategorySchema = z.object({
+  body: z.object({
+    isActive: z.boolean(),
+  }),
+});
