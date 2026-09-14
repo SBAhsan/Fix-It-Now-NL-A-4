@@ -87,6 +87,17 @@ const updateUser = catchAsync(async(req: Request, res: Response, next: NextFunct
     })
 })
 
+const getTechnicianProfile = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const result = await adminService.getTechnicianProfileFromDB(userId as string);
+
+  res.status(200).json({
+    success: true,
+    message: "Retrieved technician profile successfully",
+    data: result,
+  });
+};
+
 
 const deleteTechnicianProfile = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const profileId = req.params.id;
@@ -109,5 +120,6 @@ export const adminController = {
     getAllUsers,
     updateCategory,
     updateUser,
+    getTechnicianProfile,
     deleteTechnicianProfile
 }

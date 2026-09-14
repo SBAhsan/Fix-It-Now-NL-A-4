@@ -108,6 +108,22 @@ const updateUserFromDB = async (userId: string, payload: IUpdateUser) => {
   return updatedUser;
 };
 
+const getTechnicianProfileFromDB = async (userId: string) => {
+  const technician = await prisma.technicianProfile.findUnique({
+    where: { userId },
+    include: {
+      user: { select: { id: true, name: true, email: true, phone: true, status: true, createdAt: true } },
+      services: true,
+    },
+  });
+
+  if (!technician) {
+    throw new Error("Technician profile not found");
+  }
+
+  return technician;
+};
+
 const deleteTechnicianProfileInDB = async (profileId: string) => {
 
     const profile = await prisma.technicianProfile.findUniqueOrThrow({
@@ -132,5 +148,6 @@ export const adminService = {
   getAllUserFromDB,
   updateCategoryInDB,
   updateUserFromDB,
+  getTechnicianProfileFromDB,
   deleteTechnicianProfileInDB
 };

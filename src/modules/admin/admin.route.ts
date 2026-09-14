@@ -3,7 +3,7 @@ import { adminController } from "./admin.controller";
 import { auth } from "../../middleware/auth";
 import { UserRole } from "../../../prisma/generated/prisma/enums";
 import { validateRequest } from "../../middleware/validateRequest";
-import { createCategorySchema, updateUserStatusSchema } from "./admin.validation";
+import { createCategorySchema, updateCategorySchema, updateUserStatusSchema } from "./admin.validation";
 
 const router = Router();
 
@@ -17,7 +17,16 @@ router.get('/bookings', auth(UserRole.ADMIN), adminController.getAllBookings);
 
 router.get('/users', auth(UserRole.ADMIN), adminController.getAllUsers);
 
+router.patch(
+  '/categories/:name',
+  auth(UserRole.ADMIN),
+  validateRequest(updateCategorySchema),
+  adminController.updateCategory,
+);
+
 router.patch('/users/:id', auth(UserRole.ADMIN), validateRequest(updateUserStatusSchema), adminController.updateUser);
+
+router.get('/technician/:userId', auth(UserRole.ADMIN), adminController.getTechnicianProfile);
 
 router.delete('/technician/:id', auth(UserRole.ADMIN), adminController.deleteTechnicianProfile);
 
