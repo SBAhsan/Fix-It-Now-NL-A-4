@@ -40,6 +40,20 @@ const createCustomerReviewInDB = async (
   return review;
 };
 
+const getMyReviewsFromDB = async (customerId: string) => {
+  return prisma.review.findMany({
+    where: { booking: { customerId } },
+    include: {
+      booking: {
+        include: {
+          technician: { include: { user: { select: { name: true } } } },
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
 const getReviewOnIndividualTechnicianFromDB = async (technicianId : string) => {
     const result = await prisma.review.findMany({
         where: {
@@ -52,9 +66,10 @@ const getReviewOnIndividualTechnicianFromDB = async (technicianId : string) => {
     }
 
     return result;
-}
+};
 
 export const reviewService = {
   createCustomerReviewInDB,
-  getReviewOnIndividualTechnicianFromDB
+  getReviewOnIndividualTechnicianFromDB,
+  getMyReviewsFromDB
 };

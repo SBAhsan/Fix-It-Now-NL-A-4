@@ -9,4 +9,6 @@ const router = Router();
 
 router.post('/', auth(UserRole.CUSTOMER), validateRequest(createBookingSchema), bookingController.createBooking);
 
+router.get('/me', auth(UserRole.CUSTOMER), bookingController.getMyBookings);
+
 export const bookingRoute = router;

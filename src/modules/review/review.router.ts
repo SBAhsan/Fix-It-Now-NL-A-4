@@ -9,6 +9,8 @@ const router = Router();
 
 router.post('/', auth(UserRole.CUSTOMER), validateRequest(createCustomerReviewSchema), reviewController.createCustomerReview);
 
+router.get('/me', auth(UserRole.CUSTOMER), reviewController.getMyReviews);
+
 router.get('/technician/:id', reviewController.getReviewOnIndividualTechnician);
 
 export const reviewRoute = router;
