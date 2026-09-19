@@ -140,7 +140,32 @@ const getAllServicesFromDB = async (query: IServiceQuery) => {
   return result;
 };
 
+const getServiceByIdFromDB = async (id: string) => {
+  const service = await prisma.service.findUnique({
+    where: { id },
+    include: {
+      category: true,
+      technician: {
+        include: {
+          user: { select: { name: true } },
+          availabilitySlots: {
+            where: { isBooked: false },
+            orderBy: { slotDate: "asc" },
+          },
+        },
+      },
+    },
+  });
+
+  if (!service) {
+    throw new Error("Service not found");
+  }
+
+  return service;
+};
+
 export const serviceService = {
   createServiceInDB,
   getAllServicesFromDB,
-};
+  getServiceByIdFromDB
+}

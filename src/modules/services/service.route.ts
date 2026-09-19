@@ -11,4 +11,6 @@ router.get('/', validateRequest(serviceQuerySchema), serviceController.getAllSer
 
 router.post('/', auth(UserRole.TECHNICIAN), validateRequest(createServiceSchema), serviceController.createService);
 
+router.get('/:id', serviceController.getServiceById);
+
 export const serviceRoute = router
