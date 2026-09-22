@@ -18,6 +18,29 @@ const createTechnicianProfile = catchAsync(async(req: Request, res: Response, ne
     })
 });
 
+const getMyTechnicianProfile = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const result = await technicianService.getMyTechnicianProfileFromDB(userId as string);
+
+  sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Retrieved technician profile successfully",
+        data: result
+    })
+};
+
+const updateMyTechnicianProfile = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const result = await technicianService.updateMyTechnicianProfileInDB(userId as string, req.body);
+
+  sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Updated technician profile successfully",
+        data: result
+    })
+};
 
 const getAllServices = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const result = await technicianService.getAllServicesFromDB();
@@ -144,6 +167,8 @@ const deleteOwnProfile = catchAsync(async(req: Request, res: Response, next: Nex
 
 export const technicianController = {
     createTechnicianProfile,
+    getMyTechnicianProfile,
+    updateMyTechnicianProfile,
     getAllServices,
     createAvailabilitySlot,
     getAllSlots,

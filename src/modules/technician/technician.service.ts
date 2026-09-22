@@ -32,6 +32,25 @@ const createTechnicianProfileInDB = async (
   return result;
 };
 
+const getMyTechnicianProfileFromDB = async (userId: string) => {
+  return prisma.technicianProfile.findUnique({
+    where: { userId },
+  });
+};
+
+const updateMyTechnicianProfileInDB = async (userId: string, payload: Partial<ICreateTechnicianProfile>) => {
+  const profile = await prisma.technicianProfile.findUnique({ where: { userId } });
+
+  if (!profile) {
+    throw new Error("Technician profile not found");
+  }
+
+  return prisma.technicianProfile.update({
+    where: { userId },
+    data: payload,
+  });
+};
+
 const getAllServicesFromDB = async () => {
   const result = await prisma.service.findMany();
 
@@ -273,6 +292,8 @@ const deleteOwnProfileInDB = async (userId: string) => {
 
 export const technicianService = {
   createTechnicianProfileInDB,
+  getMyTechnicianProfileFromDB,
+  updateMyTechnicianProfileInDB,
   getAllServicesFromDB,
   createAvailableSlotInDB,
   getAllSlotsFromDB,
