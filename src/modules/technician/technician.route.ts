@@ -23,8 +23,6 @@ router.get('/reviews', auth(UserRole.TECHNICIAN), technicianController.getAllRev
 
 router.delete('/', auth(UserRole.TECHNICIAN), technicianController.deleteOwnProfile);
 
-router.get('/profile', auth(UserRole.TECHNICIAN), technicianController.getMyTechnicianProfile);
-
 router.patch('/bookings/:id', auth(UserRole.TECHNICIAN), validateRequest(updateBookingStatusSchema), technicianController.updateBookingStatus);
 
 router.get('/bookings/:id', auth(UserRole.TECHNICIAN), technicianController.getMyBookingById);
