@@ -29,6 +29,8 @@ router.patch('/bookings/:id', auth(UserRole.TECHNICIAN), validateRequest(updateB
 
 router.get('/bookings/:id', auth(UserRole.TECHNICIAN), technicianController.getMyBookingById);
 
+router.get('/profile', auth(UserRole.TECHNICIAN), technicianController.getMyTechnicianProfile);
+
 router.patch('/profile', auth(UserRole.TECHNICIAN), technicianController.updateMyTechnicianProfile);
 
 
