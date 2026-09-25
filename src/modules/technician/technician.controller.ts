@@ -43,7 +43,10 @@ const updateMyTechnicianProfile = async (req: Request, res: Response) => {
 };
 
 const getAllServices = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-    const result = await technicianService.getAllServicesFromDB();
+
+    const technicianId = req.user?.id;
+
+    const result = await technicianService.getAllServicesFromDB(technicianId as string);
 
     sendResponse(res, {
         success: true,

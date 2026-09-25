@@ -20,18 +20,6 @@ const createService = catchAsync(async(req: Request, res: Response, next: NextFu
     })
 });
 
-const getLoggedInTechnicianAllServices = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-    const technicianId = req.user?.id;
-
-    const services = await serviceService.getLoggedInTechnicianAllServicesFromDB(technicianId as string);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Retrieved services successfully",
-        data: services
-    });
-})
 
 const getAllServices = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 
@@ -61,7 +49,6 @@ const getServiceById = async (req: Request, res: Response) => {
 
 export const serviceController = {
     getAllServices,
-    getLoggedInTechnicianAllServices,
     createService,
     getServiceById
 }

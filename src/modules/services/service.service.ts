@@ -40,20 +40,6 @@ const createServiceInDB = async (
   return service;
 };
 
-const getLoggedInTechnicianAllServicesFromDB = async (technicianId: string) => {
-  const services = await prisma.service.findMany({
-    where: {
-      technicianId
-    }
-  });
-
-  if(!services) {
-    throw new Error("Found no service");
-  }
-
-  return services;
-}
-
 const getAllServicesFromDB = async (query: IServiceQuery) => {
   const andConditions: IServiceQuery[] = [];
 
@@ -181,7 +167,6 @@ const getServiceByIdFromDB = async (id: string) => {
 
 export const serviceService = {
   createServiceInDB,
-  getLoggedInTechnicianAllServicesFromDB,
   getAllServicesFromDB,
   getServiceByIdFromDB
 }

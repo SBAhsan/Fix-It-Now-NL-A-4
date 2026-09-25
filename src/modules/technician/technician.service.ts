@@ -51,8 +51,12 @@ const updateMyTechnicianProfileInDB = async (userId: string, payload: Partial<IC
   });
 };
 
-const getAllServicesFromDB = async () => {
-  const result = await prisma.service.findMany();
+const getAllServicesFromDB = async (technicianId : string) => {
+  const result = await prisma.service.findMany({
+    where: {
+      technicianId
+    }
+  });
 
   return result;
 };
