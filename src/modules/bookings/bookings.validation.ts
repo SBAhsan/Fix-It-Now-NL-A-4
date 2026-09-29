@@ -12,6 +12,5 @@ export const createBookingSchema = z.object({
     scheduledDate: z.coerce.date(),
     scheduledTime: z.coerce.date(),
     workAddress: nonEmptyString,
-    totalAmount: positiveNumber,
   }),
 });
