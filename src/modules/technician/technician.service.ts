@@ -139,7 +139,7 @@ const getMyAllBookingsFromDB = async (userId: string) => {
   });
 
   if (!technician) {
-    throw new Error("You don't have a profile");
+    throw new AppError(404, "You don't have a profile", "");
   }
 
   const result = await prisma.booking.findMany({
