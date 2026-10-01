@@ -36,8 +36,8 @@ app.get("/", (req, res) => {
 
 
 app.use('/api/auth', authRoute);
-app.use('/api', userRoute);
 app.use('/api/technician', technicianRoute);
+app.use('/api', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/categories', categoryRoute);
 app.use('/api/services', serviceRoute);
