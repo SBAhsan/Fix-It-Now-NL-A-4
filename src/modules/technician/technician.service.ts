@@ -38,8 +38,13 @@ const getMyTechnicianProfileFromDB = async (userId: string) => {
   });
 };
 
-const updateMyTechnicianProfileInDB = async (userId: string, payload: Partial<ICreateTechnicianProfile>) => {
-  const profile = await prisma.technicianProfile.findUnique({ where: { userId } });
+const updateMyTechnicianProfileInDB = async (
+  userId: string,
+  payload: Partial<ICreateTechnicianProfile>,
+) => {
+  const profile = await prisma.technicianProfile.findUnique({
+    where: { userId },
+  });
 
   if (!profile) {
     throw new Error("Technician profile not found");
@@ -51,19 +56,19 @@ const updateMyTechnicianProfileInDB = async (userId: string, payload: Partial<IC
   });
 };
 
-const getAllServicesFromDB = async (technicianId : string) => {
+const getAllServicesFromDB = async (technicianId: string) => {
   const result = await prisma.service.findMany({
     where: {
-      technician : {
-        userId: technicianId
+      technician: {
+        userId: technicianId,
       },
     },
     include: {
-      category: true
+      category: true,
     },
     orderBy: {
-      createdAt: "desc"
-    }
+      createdAt: "desc",
+    },
   });
 
   return result;
@@ -146,6 +151,11 @@ const getMyAllBookingsFromDB = async (userId: string) => {
     where: {
       technicianId: technician.id,
     },
+    include: {
+      bookingItems: { include: { service: true } },
+      customer: true,
+    },
+    orderBy: { createdAt: "desc" },
   });
 
   return result;
