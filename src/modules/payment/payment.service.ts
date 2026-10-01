@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe";
 import { AppError } from "../../utils/appError";
+import config from "../../config";
 
 const createCheckoutSessionInDB = async (
   customerId: string,
@@ -44,8 +45,8 @@ const createCheckoutSessionInDB = async (
     mode: "payment",
     payment_method_types: ["card"],
     metadata: { bookingId: booking.id },
-    success_url: "http://localhost:5000/payment/success",
-    cancel_url: "http://localhost:5000/payment/cancel",
+    success_url: `${config.frontend_url}/payment/success?bookingId=${booking.id}`,
+    cancel_url: `${config.frontend_url}/payment/cancel?bookingId=${booking.id}`,
     line_items: [
       {
         quantity: 1,
