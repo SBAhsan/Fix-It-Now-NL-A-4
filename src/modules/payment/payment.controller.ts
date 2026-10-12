@@ -64,6 +64,18 @@ const webhook = catchAsync(
   },
 );
 
+const confirmPayment = catchAsync(async (req: Request, res: Response) => {
+
+  const result = await paymentService.confirmPaymentInDB(req.user?.id as string, req.body.bookingId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Payment confirmed",
+    data: result,
+  });
+});
+
 const getPaymentHistory = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const customerId = req.user?.id;
@@ -103,6 +115,7 @@ const getPaymentHistoryById = catchAsync(
 export const paymentController = {
   createCheckoutSession,
   webhook,
+  confirmPayment,
   getPaymentHistory,
   getPaymentHistoryById,
 };

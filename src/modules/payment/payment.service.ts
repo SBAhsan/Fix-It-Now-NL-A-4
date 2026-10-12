@@ -23,8 +23,8 @@ const createCheckoutSessionInDB = async (
     throw new AppError(404, "This booking does not exist", "");
   }
 
-  if(booking.payment){
-    throw new AppError (400, "Payment already done", "");
+  if (booking.payment) {
+    throw new AppError(400, "Payment already done", "");
   }
 
   if (booking.customerId !== customerId) {
@@ -42,29 +42,29 @@ const createCheckoutSessionInDB = async (
   let session;
   try {
     session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    payment_method_types: ["card"],
-    metadata: { bookingId: booking.id },
-    success_url: `${config.frontend_url}/payment/success?bookingId=${booking.id}`,
-    cancel_url: `${config.frontend_url}/payment/cancel?bookingId=${booking.id}`,
-    line_items: [
-      {
-        quantity: 1,
-        price_data: {
-          currency: "USD",
-          product_data: {
-            name: `Booking #${booking.id}`,
+      mode: "payment",
+      payment_method_types: ["card"],
+      metadata: { bookingId: booking.id },
+      success_url: `${config.frontend_url}/payment/success?bookingId=${booking.id}`,
+      cancel_url: `${config.frontend_url}/payment/cancel?bookingId=${booking.id}`,
+      line_items: [
+        {
+          quantity: 1,
+          price_data: {
+            currency: "USD",
+            product_data: {
+              name: `Booking #${booking.id}`,
+            },
+            unit_amount: Math.round(Number(booking.totalAmount) * 100),
           },
-          unit_amount: Math.round(Number(booking.totalAmount) * 100),
         },
-      },
-    ],
-  });
+      ],
+    });
 
-  console.log('Session Created: ',session.id);
+    console.log("Session Created: ", session.id);
   } catch (error) {
-    console.log('Stripe Error: ', error);
-    throw error
+    console.log("Stripe Error: ", error);
+    throw error;
   }
 
   const payment = await prisma.payment.create({
@@ -94,7 +94,7 @@ const handleWebhookEvent = async (event: Stripe.Event) => {
         },
         data: {
           status: "COMPLETED",
-          paidAt: new Date()
+          paidAt: new Date(),
         },
       });
 
@@ -131,6 +131,44 @@ const handleWebhookEvent = async (event: Stripe.Event) => {
     default:
       break;
   }
+};
+
+const confirmPaymentInDB = async (customerId: string, bookingId: string) => {
+  const payment = await prisma.payment.findUnique({
+    where: { bookingId },
+    include: { booking: true },
+  });
+
+  if (!payment || payment.booking.customerId !== customerId) {
+    throw new AppError(404, "Payment not found", "");
+  }
+
+  if (payment.status === "COMPLETED") return payment;
+
+  const session = await stripe.checkout.sessions.retrieve(
+    payment.transactionId as string,
+  );
+  if (session.payment_status !== "paid") {
+    throw new AppError(400, "Payment not completed yet", "");
+  }
+
+  await prisma.payment.update({
+    where: { bookingId },
+    data: { status: "COMPLETED", paidAt: `${new Date().toLocaleDateString}` },
+  });
+
+  await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "IN_PROGRESS" },
+  });
+
+  const result = await prisma.payment.findUnique({ 
+    where: { 
+      bookingId 
+    } 
+    });
+
+  return result;
 };
 
 const getPaymentHistoryFromDB = async (customerId: string) => {
@@ -185,6 +223,7 @@ const getPaymentHistoryByIdFromDB = async (
 export const paymentService = {
   createCheckoutSessionInDB,
   handleWebhookEvent,
+  confirmPaymentInDB,
   getPaymentHistoryFromDB,
   getPaymentHistoryByIdFromDB,
 };
