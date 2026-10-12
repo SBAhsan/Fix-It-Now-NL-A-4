@@ -154,7 +154,7 @@ const confirmPaymentInDB = async (customerId: string, bookingId: string) => {
 
   await prisma.payment.update({
     where: { bookingId },
-    data: { status: "COMPLETED", paidAt: `${new Date().toLocaleDateString}` },
+    data: { status: "COMPLETED", paidAt: new Date().toLocaleDateString() },
   });
 
   await prisma.booking.update({
