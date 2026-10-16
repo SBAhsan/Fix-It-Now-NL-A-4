@@ -90,7 +90,7 @@ const getAllServicesFromDB = async (query: IServiceQuery) => {
   const services = await prisma.service.findMany({
     where: {
       isActive: true,
-      AND: andConditions
+      AND: andConditions,
     },
     include: {
       category: true,
@@ -125,7 +125,9 @@ const getAllServicesFromDB = async (query: IServiceQuery) => {
     },
   });
 
-  const ratingsMap = new Map(ratings.map((r) => [r.technicianId, r._avg ?? 0]));
+  const ratingsMap = new Map(
+    ratings.map((r) => [r.technicianId, Number(r._avg.rating ?? 0)]),
+  );
 
   let result = services.map((service) => ({
     ...service,
@@ -133,9 +135,8 @@ const getAllServicesFromDB = async (query: IServiceQuery) => {
   }));
 
   if (query.rating) {
-    result = result.filter(
-      (service) => service.technicianRating === query.rating,
-    );
+    const minRating = Number(query.rating);
+    result = result.filter((service) => service.technicianRating >= minRating);
   }
 
   return result;
@@ -168,5 +169,5 @@ const getServiceByIdFromDB = async (id: string) => {
 export const serviceService = {
   createServiceInDB,
   getAllServicesFromDB,
-  getServiceByIdFromDB
-}
+  getServiceByIdFromDB,
+};
