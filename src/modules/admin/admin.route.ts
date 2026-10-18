@@ -17,6 +17,8 @@ router.get('/bookings', auth(UserRole.ADMIN), adminController.getAllBookings);
 
 router.get('/users', auth(UserRole.ADMIN), adminController.getAllUsers);
 
+router.get('/payments', auth(UserRole.ADMIN), adminController.getAllPayments);
+
 router.patch(
   '/categories/:name',
   auth(UserRole.ADMIN),

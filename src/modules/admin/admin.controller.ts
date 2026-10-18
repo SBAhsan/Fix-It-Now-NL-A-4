@@ -62,6 +62,17 @@ const getAllUsers = catchAsync(async(req: Request, res: Response, next: NextFunc
     })
 })
 
+const getAllPayments = catchAsync(async (req: Request, res: Response) => {
+  const result = await adminService.getAllPaymentsFromDB();
+
+  sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "All the bookings retrieved successfully",
+        data: result
+    })
+});
+
 const updateCategory = async (req: Request, res: Response) => {
   const { name } = req.params;
   const result = await adminService.updateCategoryInDB(name as string, req.body);
@@ -118,6 +129,7 @@ export const adminController = {
     getAllServices,
     getAllBookings,
     getAllUsers,
+    getAllPayments,
     updateCategory,
     updateUser,
     getTechnicianProfile,

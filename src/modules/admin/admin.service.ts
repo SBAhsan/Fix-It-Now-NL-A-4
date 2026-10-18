@@ -65,6 +65,12 @@ const getAllUserFromDB = async () => {
   return result;
 };
 
+const getAllPaymentsFromDB = async () => {
+  return prisma.payment.findMany({
+    orderBy: { paidAt: "desc" },
+  });
+};
+
 const updateCategoryInDB = async (name: string, payload: { isActive: boolean }) => {
   const category = await prisma.category.findUnique({
     where: { name },
@@ -146,6 +152,7 @@ export const adminService = {
   getAllServicesFromDB,
   getAllBookingsFromDB,
   getAllUserFromDB,
+  getAllPaymentsFromDB,
   updateCategoryInDB,
   updateUserFromDB,
   getTechnicianProfileFromDB,
