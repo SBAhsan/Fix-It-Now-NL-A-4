@@ -5,6 +5,14 @@ import { BookingStatus, UserRole } from "./generated/prisma/enums";
 async function main() {
   const hashedPassword = await bcrypt.hash("Passw0rd!123", 10);
 
+  const alreadySeeded = await prisma.user.findUnique({
+    where: { email: "admin@example.com" },
+  });
+  if (alreadySeeded) {
+    console.log("Already seeded");
+    return;
+  }
+
   const admin = await prisma.user.create({
     data: {
       name: "Admin User",
@@ -72,7 +80,7 @@ async function main() {
         bio: "10 years experience in residential electrical work.",
         skills: ["wiring", "circuit repair", "installation"],
         experienceYears: 10,
-        city: "Chittagong",
+        city: "Chattogram",
         avgRating: 4.5,
         totalReviews: 12,
       },
@@ -94,22 +102,32 @@ async function main() {
   console.log("Created 2 technician profiles");
 
   const [category1, category2, category3] = await Promise.all([
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: {
+        name: "Electrical",
+      },
+      update: {},
+      create: {
         name: "Electrical",
         isActive: true,
       },
     }),
-
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: {
+        name: "Plumbing",
+      },
+      update: {},
+      create: {
         name: "Plumbing",
         isActive: true,
       },
     }),
-
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: {
+        name: "Cleaning",
+      },
+      update: {},
+      create: {
         name: "Cleaning",
         isActive: true,
       },
@@ -164,6 +182,42 @@ async function main() {
     }),
   ]);
 
+  const inDays = (days: number, hour: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    d.setHours(hour, 0, 0, 0);
+    return d;
+  };
+
+  await prisma.availabilitySlot.createMany({
+    data: [
+      {
+        technicianId: technician1.id,
+        slotDate: inDays(2, 0),
+        slotTime: inDays(2, 10),
+        isBooked: false,
+      },
+      {
+        technicianId: technician1.id,
+        slotDate: inDays(3, 0),
+        slotTime: inDays(3, 14),
+        isBooked: false,
+      },
+      {
+        technicianId: technician2.id,
+        slotDate: inDays(2, 0),
+        slotTime: inDays(2, 11),
+        isBooked: false,
+      },
+      {
+        technicianId: technician2.id,
+        slotDate: inDays(4, 0),
+        slotTime: inDays(4, 15),
+        isBooked: false,
+      },
+    ],
+  });
+
   console.log("Created 2 availability slots");
 
   const [booking1, booking2] = await Promise.all([
@@ -209,4 +263,9 @@ async function main() {
   console.log("Created 1 review");
 }
 
-main().then(process.exit(0));
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
