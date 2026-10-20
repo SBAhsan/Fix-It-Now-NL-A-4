@@ -141,7 +141,7 @@ async function main() {
       data: {
         title: "Home Wiring Inspection",
         description: "Full inspection of home electrical wiring.",
-        price: 1500,
+        price: 150,
         isActive: true,
         technicianId: technician1.id,
         categoryId: category1.id,
@@ -152,7 +152,7 @@ async function main() {
       data: {
         title: "Leak Detection & Repair",
         description: "Detect and fix pipe leaks.",
-        price: 1200,
+        price: 120,
         isActive: true,
         technicianId: technician2.id,
         categoryId: category2.id,
